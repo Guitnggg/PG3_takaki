@@ -1,55 +1,60 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-// 再帰的な賃金を計算する関数
-int RecursiveWage(int hour) {
-    if (hour == 1) {
-        return 1172; // 1時間目の時給は100円アップした1172円
-    }
-    return (RecursiveWage(hour - 1) * 2 - 50); // 前の時給*2 - 50円
+
+// サイコロを振る関数
+int RollDice(void) {
+    return rand() % 6 + 1; // 1から6のランダムな数を生成
 }
 
-int main() {
-    const int normalWage = 1072; // 一般的な時給
-    int hours; // 働く時間数
-    int totalNormalWage = 0; // 一般的な賃金体系での総収入
-    int totalRecursiveWage = 0; // 再帰的な賃金体系での総収入
+// 結果を表示するコールバック関数
+void ShowResult(int diceResult, char userGuess) {
+    printf("サイコロの出目は %d です。\n", diceResult);
 
-    // 働く時間数の入力を求める
-    printf("何時間働くかを入力してください: ");
-    scanf_s("%d", &hours);
-
-    // 賃金体系の比較
-    printf("\n時給の比較:\n");
-    printf("時間 | 一般的な賃金体系 | 再帰的な賃金体系\n");
-    printf("--------------------------------------\n");
-
-    for (int i = 1; i <= hours; i++) {
-        int normalHourlyWage = normalWage;
-        int recursiveHourlyWage = RecursiveWage(i);
-
-        // 総収入を計算
-        totalNormalWage += normalHourlyWage;
-        totalRecursiveWage += recursiveHourlyWage;
-
-        // 時給の比較を表示
-        printf("%3d  | %12d 円    | %12d 円\n", i, normalHourlyWage, recursiveHourlyWage);
-    }
-
-    // 最終的な総収入の比較を表示
-    printf("\n%d時間働いた場合の総収入:\n", hours);
-    printf("一般的な賃金体系の総収入: %d 円\n", totalNormalWage);
-    printf("再帰的な賃金体系の総収入: %d 円\n", totalRecursiveWage);
-
-    // どちらが有利かを判断
-    if (totalRecursiveWage > totalNormalWage) {
-        printf("\n再帰的な賃金体系が有利です。\n");
-    }
-    else if (totalRecursiveWage < totalNormalWage) {
-        printf("\n一般的な賃金体系が有利です。\n");
+    if (diceResult % 2 == 0) {
+        printf("\n出目は丁（偶数）です。\n");
+        if (userGuess == 'D' || userGuess == 'd') {
+            printf("\nおめでとう！正解です。\n");
+        }
+        else {
+            printf("\n残念！不正解です。\n");
+        }
     }
     else {
-        printf("\nどちらの賃金体系も同じです。\n");
+        printf("\n出目は半（奇数）です。\n");
+        if (userGuess == 'H' || userGuess == 'h') {
+            printf("\nおめでとう！正解です。\n");
+        }
+        else {
+            printf("\n残念！不正解です。\n");
+        }
     }
+}
+
+int main(void) {
+    // 乱数の初期化
+    srand((unsigned int)time(NULL));
+
+    int diceResult; // サイコロの結果
+    char userGuess; // ユーザーの予想
+
+    printf("サイコロを振ります。出目が半（奇数）か丁（偶数）かを当ててください。\n");
+    printf("半（奇数）の場合は 'H'、丁（偶数）の場合は 'D' を入力してください: ");
+
+    // ユーザーの入力を受け取る
+    scanf_s(" %c", &userGuess);
+
+    // サイコロを振る
+    diceResult = RollDice();
+
+    // もったいつけるために3秒間待つ
+    printf("\n結果を待っています...\n");
+   
+
+    // 結果を表示するコールバック関数を呼び出す
+    void (*resultCallback)(int, char) = ShowResult; // 関数ポインタ
+    resultCallback(diceResult, userGuess); // コールバック関数を呼び出す
 
     return 0;
 }
