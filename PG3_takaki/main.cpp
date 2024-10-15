@@ -1,18 +1,21 @@
 #include <stdio.h>
 
 // 再帰的な賃金を計算する関数
-int RecursiveWage(int hour) {
-    if (hour == 1) {
-        return 1172; // 1時間目の時給は100円アップした1172円
+int RecursiveWage(int hours) {
+    int totalWage = 0;
+    int currentWage = 100;
+
+    for (int i = 1; i <= hours; i++) {
+        totalWage += currentWage;
+        currentWage = currentWage * 2 - 50; // 次の時給を計算
     }
-    return (RecursiveWage(hour - 1) * 2 - 50); // 前の時給*2 - 50円
+
+    return totalWage;
 }
 
 int main() {
     const int normalWage = 1072; // 一般的な時給
     int hours; // 働く時間数
-    int totalNormalWage = 0; // 一般的な賃金体系での総収入
-    int totalRecursiveWage = 0; // 再帰的な賃金体系での総収入
 
     // 働く時間数の入力を求める
     printf("何時間働くかを入力してください: ");
@@ -23,9 +26,13 @@ int main() {
     printf("時間 | 一般的な賃金体系 | 再帰的な賃金体系\n");
     printf("--------------------------------------\n");
 
+    int totalNormalWage = 0; // 一般的な賃金体系での総収入
+    int totalRecursiveWage = 0; // 再帰的な賃金体系での総収入
+
+    // 時間ごとの賃金を計算
     for (int i = 1; i <= hours; i++) {
-        int normalHourlyWage = normalWage;
-        int recursiveHourlyWage = RecursiveWage(i);
+        int normalHourlyWage = normalWage; // 一般的な時給
+        int recursiveHourlyWage = RecursiveWage(i); // 再帰的な時給計算
 
         // 総収入を計算
         totalNormalWage += normalHourlyWage;
