@@ -4,18 +4,6 @@
 #include <stdbool.h>
 #include <Windows.h>
 
-// コールバック関数
-typedef void (*PFunc)(bool);
-
-void Result(bool isCorrect) {
-    if (isCorrect) {
-        printf("\nおめでとう大正解！\n");
-    }
-    else {
-        printf("\n残念、不正解\n");
-    }
-}
-
 // 奇数か偶数かを判定
 bool IsEven(int number) {
     return number % 2 == 0;
@@ -26,7 +14,7 @@ int RollDice() {
     return rand() % 6 + 1;
 }
 
-void GuessOddOrEven(PFunc callback) {
+void GuessOddOrEven(bool (*callback)(bool)) {
     int dice = RollDice();
     int Guess;
     bool isEven = IsEven(dice);
@@ -39,14 +27,23 @@ void GuessOddOrEven(PFunc callback) {
     printf("正解は...\n");
     Sleep(3000);  // 3秒待つ
 
-    //結果を表示
+    // 結果を表示
     callback(isEven == userIsEven);
 }
 
 int main() {
     srand(time(NULL));
 
-    GuessOddOrEven(Result);
+    // ラムダ式を使用してコールバック関数を定義
+    GuessOddOrEven([](bool isCorrect) -> bool {
+        if (isCorrect) {
+            printf("\nおめでとう大正解！\n");
+        }
+        else {
+            printf("\n残念、不正解\n");
+        }
+        return isCorrect;
+        });
 
     return 0;
 }
