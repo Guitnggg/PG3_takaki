@@ -1,11 +1,19 @@
-#include <stdio.h>
-//#include <Windows.h>
+#include "Circle.h"
+#include "Rectangle.h"
+#include <iostream>
 
 int main()
 {
-	/*SetConsoleOutputCP(65001);*/
+    //インスタンスを作成
+   
+    // 円の半径
+    Circle circle(3.0);
+    
+    // 矩形の幅
+    Rectangle rectangle(5.0, 5.0);
 
-	printf("ああああ");
+    circle.Draw();
+    rectangle.Draw();
 
-	return 0;
+    return 0;
 }
