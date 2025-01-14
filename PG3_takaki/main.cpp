@@ -34,8 +34,5 @@ int main() {
 		cout << *itr << endl;
 	}
 
-	// コンソールウィンドウが閉じないようにする
-	system("pause");
-
 	return 0;
 }
